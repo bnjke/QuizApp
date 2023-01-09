@@ -1,13 +1,13 @@
 package com.bnjke.quizapp;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -18,10 +18,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class DifficultQuiz extends AppCompatActivity {
+public class AnotherQuiz extends AppCompatActivity {
 
     TextView quiztext, aans, bans, cans, dans;
     List<Questions> questions;
@@ -70,7 +71,7 @@ public class DifficultQuiz extends AppCompatActivity {
                         }
                     },500);
                 }else{
-                    Intent intent = new Intent(DifficultQuiz.this, ResultActivity.class);
+                    Intent intent = new Intent(AnotherQuiz.this, ResultActivity.class);
                     intent.putExtra("correct",correct);
                     intent.putExtra("wrong", wrong);
                     startActivity(intent);
@@ -104,7 +105,7 @@ public class DifficultQuiz extends AppCompatActivity {
                         }
                     },500);
                 }else{
-                    Intent intent = new Intent(DifficultQuiz.this, ResultActivity.class);
+                    Intent intent = new Intent(AnotherQuiz.this, ResultActivity.class);
                     intent.putExtra("correct",correct);
                     intent.putExtra("wrong", wrong);
                     startActivity(intent);
@@ -138,7 +139,7 @@ public class DifficultQuiz extends AppCompatActivity {
                         }
                     },500);
                 }else{
-                    Intent intent = new Intent(DifficultQuiz.this, ResultActivity.class);
+                    Intent intent = new Intent(AnotherQuiz.this, ResultActivity.class);
                     intent.putExtra("correct",correct);
                     intent.putExtra("wrong", wrong);
                     startActivity(intent);
@@ -172,7 +173,7 @@ public class DifficultQuiz extends AppCompatActivity {
                         }
                     },500);
                 }else{
-                    Intent intent = new Intent(DifficultQuiz.this, ResultActivity.class);
+                    Intent intent = new Intent(AnotherQuiz.this, ResultActivity.class);
                     intent.putExtra("correct",correct);
                     intent.putExtra("wrong", wrong);
                     startActivity(intent);
@@ -193,10 +194,10 @@ public class DifficultQuiz extends AppCompatActivity {
 
     private void loadAllQuestions() {
         questions = new ArrayList<>();
-        String jsonquiz = loadJsonFromAsset("difficultquiz.json");
+        String jsonquiz = loadJsonFromAsset("anotherquiz.json");
         try {
             JSONObject jsonObject = new JSONObject(jsonquiz);
-            JSONArray questionsall = jsonObject.getJSONArray("difficultquiz");
+            JSONArray questionsall = jsonObject.getJSONArray("anotherquiz");
             for (int i=0; i<questionsall.length();i++){
                 JSONObject question = questionsall.getJSONObject(i);
 
@@ -231,7 +232,7 @@ public class DifficultQuiz extends AppCompatActivity {
     }
     @Override
     public void onBackPressed(){
-        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(DifficultQuiz.this);
+        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(AnotherQuiz.this);
         materialAlertDialogBuilder.setTitle(R.string.app_name);
         materialAlertDialogBuilder.setMessage("Are u want to exit the quiz?");
         materialAlertDialogBuilder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -244,7 +245,7 @@ public class DifficultQuiz extends AppCompatActivity {
         materialAlertDialogBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                startActivity(new Intent(DifficultQuiz.this,MainActivity.class));
+                startActivity(new Intent(AnotherQuiz.this,MainActivity.class));
             }
         });
         materialAlertDialogBuilder.show();

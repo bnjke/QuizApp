@@ -12,7 +12,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class MainActivity extends AppCompatActivity {
 
-    MaterialCardView easycard,difficultcard,aboutcard;
+    MaterialCardView easycard,difficultcard,anothercard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         easycard = findViewById(R.id.easyCard);
         difficultcard = findViewById(R.id.difficultCard);
+        anothercard = findViewById(R.id.anotherCard);
 
         easycard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this,DifficultQuiz.class));
+                finish();
+            }
+        });
+
+        anothercard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,AnotherQuiz.class));
                 finish();
             }
         });
