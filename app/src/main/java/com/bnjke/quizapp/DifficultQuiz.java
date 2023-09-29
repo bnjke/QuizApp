@@ -21,6 +21,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+
+import android.widget.Button;
+import android.widget.EditText;
+
 public class DifficultQuiz extends AppCompatActivity {
 
     TextView quiztext, aans, bans, cans, dans;
@@ -28,7 +38,9 @@ public class DifficultQuiz extends AppCompatActivity {
     int currentQuestions = 0;
     int correct = 0, wrong =0;
     Intent intent;
-
+    DatabaseHelper sqlHelper;
+    SQLiteDatabase db;
+    Cursor userCursor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +51,17 @@ public class DifficultQuiz extends AppCompatActivity {
         bans = findViewById(R.id.banswer);
         cans = findViewById(R.id.canswer);
         dans = findViewById(R.id.danswer);
-
-        loadAllQuestions();
+        sqlHelper = new DatabaseHelper(this);
+        db = sqlHelper.open();
+        userCursor = db.rawQuery("select * from " + DatabaseHelper.TABLE + " where " +
+                DatabaseHelper.COLUMN_ID + "=?", new String[]{String.valueOf(quiztext)});
+        userCursor.moveToFirst();
+        quiztext.setText(userCursor.getString(1));
+        aans.setText(String.valueOf(userCursor.getString(2)));
+        bans.setText(String.valueOf(userCursor.getString(3)));
+        cans.setText(String.valueOf(userCursor.getString(4)));
+        dans.setText(String.valueOf(userCursor.getString(5)));
+        userCursor.close();
         Collections.shuffle(questions);
         setQuestionScreen(currentQuestions);
 
@@ -191,46 +212,10 @@ public class DifficultQuiz extends AppCompatActivity {
         dans.setText(questions.get(currentQuestions).getAns4());
     }
 
-    private void loadAllQuestions() {
-        questions = new ArrayList<>();
-        String jsonquiz = loadJsonFromAsset("difficultquiz.json");
-        try {
-            JSONObject jsonObject = new JSONObject(jsonquiz);
-            JSONArray questionsall = jsonObject.getJSONArray("difficultquiz");
-            for (int i=0; i<questionsall.length();i++){
-                JSONObject question = questionsall.getJSONObject(i);
 
-                String questionsString = question.getString("question");
-                String ans1String = question.getString("ans1");
-                String ans2String = question.getString("ans2");
-                String ans3String = question.getString("ans3");
-                String ans4String = question.getString("ans4");
-                String correctString = question.getString("correct");
-
-                questions.add(new Questions(questionsString, ans1String, ans2String, ans3String, ans4String, correctString));
-
-            }
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-    }
-
-    private String loadJsonFromAsset(String s){
-        String json="";
-        try{
-            InputStream inputStream = getAssets().open(s);
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            json = new String(buffer, "UTF-8");
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return json;
-    }
     @Override
     public void onBackPressed(){
+        db.close();
         MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(DifficultQuiz.this);
         materialAlertDialogBuilder.setTitle(R.string.app_name);
         materialAlertDialogBuilder.setMessage("Are u want to exit the quiz?");

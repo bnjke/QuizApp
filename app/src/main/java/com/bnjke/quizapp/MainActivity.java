@@ -10,14 +10,28 @@ import android.view.View;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class MainActivity extends AppCompatActivity {
+import android.widget.AdapterView;
+import android.widget.SimpleCursorAdapter;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
+import android.widget.ListView;
+
+public class MainActivity extends AppCompatActivity {
+    ListView userList;
+    DatabaseHelper databaseHelper;
+    SQLiteDatabase db;
+    Cursor userCursor;
+    SimpleCursorAdapter userAdapter;
     MaterialCardView easycard,difficultcard,anothercard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        databaseHelper = new DatabaseHelper(getApplicationContext());
+        // создаем базу данных
+        databaseHelper.create_db();
 
 
         easycard = findViewById(R.id.easyCard);
@@ -68,5 +82,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         materialAlertDialogBuilder.show();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Закрываем подключение и курсор
+        db.close();
+        userCursor.close();
     }
 }
